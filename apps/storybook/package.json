@@ -1,0 +1,19 @@
+{
+  "name": "@ooa/storybook",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "storybook dev -p 7856",
+    "build": "storybook build"
+  },
+  "dependencies": {
+    "@ooa/components": "workspace:*",
+    "@ooa/tokens": "workspace:*"
+  },
+  "devDependencies": {
+    "@storybook/web-components-vite": "^10.2.9",
+    "lit": "^3.3.0",
+    "storybook": "^10.2.9",
+    "typescript": "~6.0.2"
+  }
+}

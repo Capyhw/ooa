@@ -1,0 +1,19 @@
+{
+  "name": "ooa",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Framework-agnostic Web Components inspired by Ant Design 6.",
+  "packageManager": "pnpm@9.15.9",
+  "scripts": {
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "test:browser": "turbo run test:browser",
+    "dev": "pnpm --filter @ooa/components dev",
+    "docs": "pnpm --filter docs dev",
+    "storybook": "pnpm --filter @ooa/storybook dev"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.0",
+    "typescript": "~6.0.2"
+  }
+}

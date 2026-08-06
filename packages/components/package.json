@@ -1,0 +1,41 @@
+{
+  "name": "@ooa/components",
+  "version": "0.1.0",
+  "description": "OOA framework-agnostic Web Components.",
+  "license": "MIT",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -p tsconfig.build.json && vite build",
+    "preview": "vite preview",
+    "test": "vitest run --project unit",
+    "test:browser": "vitest run --project browser"
+  },
+  "peerDependencies": {
+    "lit": "^3.0.0"
+  },
+  "devDependencies": {
+    "@vitest/browser-playwright": "^4.1.6",
+    "lit": "^3.3.0",
+    "playwright": "^1.57.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.2.0",
+    "vitest": "^4.1.6",
+    "vitest-browser-lit": "^1.0.1"
+  },
+  "dependencies": {
+    "@lit/context": "^1.1.6",
+    "@ooa/tokens": "workspace:*"
+  }
+}

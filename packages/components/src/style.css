@@ -1,0 +1,22 @@
+:root {
+  color: #101828;
+  background: #f7f8fa;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; }
+main { width: min(960px, calc(100% - 40px)); margin: 0 auto; padding: 72px 0; }
+header { margin-bottom: 48px; }
+header span { color: #1677ff; font: 600 12px/1.2 ui-monospace, monospace; letter-spacing: 0; }
+h1 { margin: 10px 0; font-size: 48px; letter-spacing: 0; }
+header p { margin: 0; color: #667085; font-family: ui-sans-serif, sans-serif; }
+section { padding: 28px 0; border-top: 1px solid #d0d5dd; }
+h2 { margin: 0 0 16px; font: 600 15px/1.2 ui-monospace, monospace; letter-spacing: 0; }
+.row, .stack { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.stack { align-items: stretch; flex-direction: column; max-width: 420px; }
+
+@media (max-width: 600px) {
+  main { width: min(100% - 32px, 960px); padding: 40px 0; }
+  h1 { font-size: 36px; }
+}
