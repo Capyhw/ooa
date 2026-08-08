@@ -2,12 +2,12 @@ export type ButtonType = 'default' | 'primary' | 'dashed' | 'link' | 'text';
 export type ButtonShape = 'default' | 'circle' | 'round' | 'square';
 export type ButtonHTMLType = 'submit' | 'button' | 'reset';
 export type ButtonVariant = 'outlined' | 'dashed' | 'solid' | 'filled' | 'text' | 'link';
-export type PresetColor = 'red' | 'volcano' | 'orange' | 'gold' | 'lime' | 'green' | 'cyan' | 'blue' | 'geekblue' | 'purple' | 'magenta';
+export type PresetColor = 'blue' | 'purple' | 'cyan' | 'green' | 'magenta' | 'pink' | 'red' | 'orange' | 'yellow' | 'volcano' | 'geekblue' | 'lime' | 'gold';
 export type ButtonColor = 'default' | 'primary' | 'danger' | 'link' | PresetColor;
 
 export const BUTTON_TYPES: readonly ButtonType[] = ['default', 'primary', 'dashed', 'link', 'text'];
 export const BUTTON_VARIANTS: readonly ButtonVariant[] = ['outlined', 'dashed', 'solid', 'filled', 'text', 'link'];
-export const PRESET_COLORS: readonly PresetColor[] = ['red', 'volcano', 'orange', 'gold', 'lime', 'green', 'cyan', 'blue', 'geekblue', 'purple', 'magenta'];
+export const PRESET_COLORS: readonly PresetColor[] = ['blue', 'purple', 'cyan', 'green', 'magenta', 'pink', 'red', 'orange', 'yellow', 'volcano', 'geekblue', 'lime', 'gold'];
 
 const rxTwoCNChar = /^[一-龥]{2}$/;
 export const isTwoCNChar = (char: string): boolean => rxTwoCNChar.test(char);

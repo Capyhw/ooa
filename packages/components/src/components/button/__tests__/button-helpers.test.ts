@@ -1,6 +1,7 @@
 import { expect } from 'vitest';
 import {
   PRESET_COLORS,
+  getLoadingConfig,
   isTwoCNChar,
   isUnBorderedVariant,
   resolveColorVariant,
@@ -37,6 +38,7 @@ describe('resolveColorVariant', () => {
     expect(resolveColorVariant({})).toEqual({ color: 'default', variant: 'outlined' });
   });
   it('type 语法糖经 ButtonTypeMap 推导', () => {
+    expect(resolveColorVariant({ type: 'default' })).toEqual({ color: 'default', variant: 'outlined' });
     expect(resolveColorVariant({ type: 'primary' })).toEqual({ color: 'primary', variant: 'solid' });
     expect(resolveColorVariant({ type: 'dashed' })).toEqual({ color: 'default', variant: 'dashed' });
     expect(resolveColorVariant({ type: 'text' })).toEqual({ color: 'default', variant: 'text' });
@@ -64,5 +66,17 @@ describe('resolveColorVariant', () => {
     for (const c of PRESET_COLORS as readonly ButtonColor[]) {
       expect(resolveColorVariant({ color: c, variant: 'outlined' }).color).toBe(c);
     }
+  });
+});
+
+describe('getLoadingConfig', () => {
+  it('delay<=0 时 loading 立即生效', () => {
+    expect(getLoadingConfig(true, 0)).toEqual({ loading: true, delay: 0 });
+  });
+  it('delay>0 时延迟生效，loading 暂为 false', () => {
+    expect(getLoadingConfig(false, 200)).toEqual({ loading: false, delay: 200 });
+  });
+  it('delay<=0 且 loading false', () => {
+    expect(getLoadingConfig(false, 0)).toEqual({ loading: false, delay: 0 });
   });
 });
