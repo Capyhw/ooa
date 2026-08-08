@@ -15,7 +15,9 @@ export const buttonGroupStyles = css`
     position: relative;
     z-index: 1;
   }
-  .ooa-btn-group ::slotted(ooa-button:hover) {
+  .ooa-btn-group ::slotted(ooa-button:hover),
+  .ooa-btn-group ::slotted(ooa-button:active),
+  .ooa-btn-group ::slotted(ooa-button:focus-within) {
     z-index: 2;
   }
   .ooa-btn-group ::slotted(ooa-button[disabled]) {

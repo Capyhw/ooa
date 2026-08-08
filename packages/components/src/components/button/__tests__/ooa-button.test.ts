@@ -83,6 +83,15 @@ describe('计算样式走 --ooa-btn-* 变量', () => {
     const el = await renderButton({ color: 'default', variant: 'solid' });
     expect(getComputedStyle(getButton(el)).color).toBe('rgb(255, 255, 255)'); // colorBgSolid 黑色 → 白字
   });
+  it('danger 按派生色 data-color="danger" 生效（显式 color+variant，无 danger prop）', async () => {
+    const el = await renderButton({ color: 'danger', variant: 'text' }, '');
+    expect(getButton(el).classList.contains('ooa-btn-color-dangerous')).toBe(true);
+    expect(getComputedStyle(getButton(el)).color).toBe('rgb(255, 77, 79)'); // colorError
+  });
+  it('color+variant 显式时 danger prop 为 vestigial → primary 蓝（对位 antd）', async () => {
+    const el = await renderButton({ color: 'primary', variant: 'solid', danger: true }, '');
+    expect(getComputedStyle(getButton(el)).backgroundColor).toBe('rgb(22, 119, 255)'); // colorPrimary
+  });
 });
 
 describe('形状 / 尺寸 / block', () => {
@@ -139,6 +148,17 @@ describe('loading', () => {
       vi.advanceTimersByTime(200);
       await (el as HTMLElement & { updateComplete?: Promise<unknown> }).updateComplete;
       expect(getButton(el).classList.contains('ooa-btn-loading')).toBe(true);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+  it('无 loading 仅 loading-delay 不进入 loading（对位 antd：delay 仅随 loading 生效）', async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
+    try {
+      const el = await renderButton({ 'loading-delay': '200' }, '');
+      vi.advanceTimersByTime(200);
+      await (el as HTMLElement & { updateComplete?: Promise<unknown> }).updateComplete;
+      expect(getButton(el).classList.contains('ooa-btn-loading')).toBe(false);
     } finally {
       vi.useRealTimers();
     }

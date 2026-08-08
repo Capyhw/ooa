@@ -161,8 +161,10 @@ export const buttonVariantStyles = css`
     --ooa-btn-text-color-hover: var(--ooa-btn-text-color);
     --ooa-btn-text-color-active: var(--ooa-btn-text-color);
   }
-  /* >>>>> Danger */
-  :host([danger]) {
+  /* >>>>> Danger（对位 antd -color-dangerous：按派生色 data-color="danger" 挂，
+     而非 [danger] 属性——显式 color="danger" variant= 时也应生效，
+     且 color+variant 显式设置时 danger prop 是 vestigial，不应触发） */
+  :host([data-color="danger"]) {
     --ooa-btn-color-base: var(--ooa-color-error, #ff4d4f);
     --ooa-btn-color-hover: var(--ooa-color-error-hover, #ff7875);
     --ooa-btn-color-active: var(--ooa-color-error-active, #d9363e);
@@ -171,7 +173,7 @@ export const buttonVariantStyles = css`
     --ooa-btn-color-light-active: var(--ooa-color-error-bg-active, #ffccc7);
     --ooa-btn-shadow: var(--ooa-btn-danger-shadow);
   }
-  :host([danger][data-variant="solid"]) {
+  :host([data-color="danger"][data-variant="solid"]) {
     --ooa-btn-text-color: var(--ooa-color-text-light-solid, #fff);
     --ooa-btn-text-color-hover: var(--ooa-btn-text-color);
     --ooa-btn-text-color-active: var(--ooa-btn-text-color);

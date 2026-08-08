@@ -54,12 +54,12 @@ function VariantMatrix({ surface }: { surface: SurfaceName }) {
 
 function DangerCombos({ surface }: { surface: SurfaceName }) {
   return (
-    <DemoBlock label="Danger combos">
-      <Row label="danger+primary">{renderBtn(surface, { variant: 'solid', color: 'primary', danger: true }, 'Danger primary')}</Row>
-      <Row label="danger+text">{renderBtn(surface, { variant: 'text', danger: true }, 'Danger text')}</Row>
-      <Row label="danger+link">{renderBtn(surface, { variant: 'link', danger: true }, 'Danger link')}</Row>
-      <Row label="danger+dashed">{renderBtn(surface, { variant: 'dashed', danger: true }, 'Danger dashed')}</Row>
-      <Row label="danger+filled">{renderBtn(surface, { variant: 'filled', danger: true }, 'Danger filled')}</Row>
+    <DemoBlock label="Danger combos（color=danger + variant）">
+      <Row label="danger solid">{renderBtn(surface, { variant: 'solid', color: 'danger' }, 'Danger solid')}</Row>
+      <Row label="danger text">{renderBtn(surface, { variant: 'text', color: 'danger' }, 'Danger text')}</Row>
+      <Row label="danger link">{renderBtn(surface, { variant: 'link', color: 'danger' }, 'Danger link')}</Row>
+      <Row label="danger dashed">{renderBtn(surface, { variant: 'dashed', color: 'danger' }, 'Danger dashed')}</Row>
+      <Row label="danger filled">{renderBtn(surface, { variant: 'filled', color: 'danger' }, 'Danger filled')}</Row>
     </DemoBlock>
   );
 }

@@ -78,4 +78,7 @@ describe('getLoadingConfig', () => {
   it('delay<=0 且 loading false', () => {
     expect(getLoadingConfig(false, 0)).toEqual({ loading: false, delay: 0 });
   });
+  it('loading=false 时 delay 归 0（antd：delay 仅随 loading 请求生效）', () => {
+    expect(getLoadingConfig(false, 200)).toEqual({ loading: false, delay: 0 });
+  });
 });

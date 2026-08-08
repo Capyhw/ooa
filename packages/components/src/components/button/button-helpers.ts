@@ -74,8 +74,9 @@ export function resolveColorVariant(input: ResolveColorVariantInput): { color: B
   return { color: parsedColor, variant: parsedVariant };
 }
 
-/** 对位 antd getLoadingConfig：loading(boolean) + delay 数值 → 生效配置。 */
+/** 对位 antd getLoadingConfig：仅当 loading 为 true 时 delay 才有意义（antd 只在 loading
+ *  为对象时携带 delay）；loading=false 时 delay 归 0，立即不 loading。 */
 export function getLoadingConfig(loading: boolean, delay: number): { loading: boolean; delay: number } {
-  const d = Number.isFinite(delay) && delay > 0 ? delay : 0;
+  const d = loading && Number.isFinite(delay) && delay > 0 ? delay : 0;
   return { loading: d <= 0 ? loading : false, delay: d };
 }
