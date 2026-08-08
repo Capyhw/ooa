@@ -23,6 +23,9 @@ export const buttonShapeSizeStyles = css`
     text-align: center;
     cursor: pointer;
     border-radius: var(--ooa-border-radius, 6px);
+    outline: none;
+    user-select: none;
+    touch-action: manipulation;
     transition: color var(--ooa-motion-duration-mid, 0.2s) var(--ooa-motion-ease-in-out, ease),
       border-color var(--ooa-motion-duration-mid, 0.2s) var(--ooa-motion-ease-in-out, ease),
       background var(--ooa-motion-duration-mid, 0.2s) var(--ooa-motion-ease-in-out, ease),
@@ -44,8 +47,8 @@ export const buttonShapeSizeStyles = css`
   /* block */
   :host([block]) button { width: 100%; }
 
-  /* loading */
-  button.ooa-btn-loading { cursor: default; }
+  /* loading（对位 antd genSharedButtonStyle：loading 时降透明度） */
+  button.ooa-btn-loading { cursor: default; opacity: var(--ooa-opacity-loading, 0.65); }
   .ooa-btn-spin { animation: ooa-btn-spin 0.8s linear infinite; }
   @keyframes ooa-btn-spin { to { transform: rotate(360deg); } }
 
