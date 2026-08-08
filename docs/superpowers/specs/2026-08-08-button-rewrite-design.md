@@ -52,7 +52,7 @@ packages/components/src/components/button/
 | antd prop | ooa attribute | 说明 |
 |---|---|---|
 | `type` | `type` | legacy 糖（经 `ButtonTypeMap` 推导），保留以兼容 parity 现有用例 |
-| `color` | `color` | default/primary/danger + 10 预设色（red/volcano/orange/gold/lime/green/cyan/blue/geekblue/purple/magenta） |
+| `color` | `color` | default/primary/danger + 13 预设色（blue/purple/cyan/green/magenta/pink/red/orange/yellow/volcano/geekblue/lime/gold） |
 | `variant` | `variant` | outlined/dashed/solid/filled/text/link |
 | `danger` | `danger` | boolean；解析为 `-dangerous` 类 |
 | `ghost` | `ghost` | boolean；新语义（见 §3） |
@@ -89,7 +89,7 @@ size 解析链：`size ?? groupSize ?? config.componentSize`；small → `-sm` �
 - **token.ts**（对位 `prepareComponentToken`）：声明 `--ooa-btn-*` 组件级变量，全部从全局 `--ooa-*` 解析并带 antd 值兜底：
   - 布局：`padding-inline(-sm/lg)`、`content-font-size(-sm/lg)`、`line-height: 1.5714`（getLineHeight(14)）。
   - 阴影：default/primary/danger + 10 预设色 `shadow-color`，形态 `0 var(--ooa-control-outline-width) 0 <outline色>`。
-  - `solid-text-color`：`color-contrast(var(--ooa-color-bg-solid) vs #000, #fff)`（等价 antd `isBright` 判断）。
+  - `solid-text-color`：**修正（实现阶段发现）**——`color-contrast()` CSS 函数在所有浏览器未实现（Chromium 151 亦不支持），改为由 ooa-button 在 JS 侧按 antd `isBright`（Rec.601 加权亮度 > 192，返回固定字面量 `#000`/`#fff`）计算，内联到宿主 `--ooa-btn-solid-text-color`。token.ts 仅保留 `text-light-solid` 兜底。
   - `only-icon-size(-sm/lg)`、`text-*` 色（textTextColor/hover/active、textHoverBg、linkHoverBg）、`default-ghost-color`、`ghost-bg`、`group-border-color`。
 - **variant.ts**（对位 `variant.ts` 逐段）：共享模板段（base 从 `--ooa-btn-*` 消费）→ hover/active 段 → 6 个 variant 段（solid/outlined+dashed/dashed/filled/text+link/text）→ 颜色段（default/primary/danger/10 预设色）→ disabled 段 → ghost 段。**不写死任何颜色**，全部走变量。
 - **index.ts**：组合 `[baseControlStyles, token, variant, shape/size/block/loading/icon-only/两汉字, group]`。
