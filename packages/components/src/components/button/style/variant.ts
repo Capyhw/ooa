@@ -152,7 +152,7 @@ export const buttonVariantStyles = css`
     --ooa-btn-color-light-active: var(--ooa-color-primary-border, #91caff);
     --ooa-btn-shadow: var(--ooa-btn-primary-shadow);
   }
-  :host([data-color="primary"][variant="solid"]) {
+  :host([data-color="primary"][data-variant="solid"]) {
     --ooa-btn-text-color: var(--ooa-color-text-light-solid, #fff);
     --ooa-btn-text-color-hover: var(--ooa-btn-text-color);
     --ooa-btn-text-color-active: var(--ooa-btn-text-color);
@@ -167,7 +167,7 @@ export const buttonVariantStyles = css`
     --ooa-btn-color-light-active: var(--ooa-color-error-bg-active, #ffccc7);
     --ooa-btn-shadow: var(--ooa-btn-danger-shadow);
   }
-  :host([danger][variant="solid"]) {
+  :host([danger][data-variant="solid"]) {
     --ooa-btn-text-color: var(--ooa-color-text-light-solid, #fff);
     --ooa-btn-text-color-hover: var(--ooa-btn-text-color);
     --ooa-btn-text-color-active: var(--ooa-btn-text-color);
@@ -188,21 +188,21 @@ export const buttonVariantStyles = css`
     --ooa-btn-text-color-active: var(--ooa-color-primary-active, #0958d9);
     --ooa-btn-shadow: var(--ooa-btn-default-shadow);
   }
-  :host([data-color="default"][variant="outlined"]) {
+  :host([data-color="default"][data-variant="outlined"]) {
     --ooa-btn-bg-color-disabled: var(--ooa-color-bg-container-disabled, rgba(0, 0, 0, 0.04));
   }
-  :host([data-color="default"][variant="solid"]) {
+  :host([data-color="default"][data-variant="solid"]) {
     --ooa-btn-text-color: var(--ooa-btn-solid-text-color);
     --ooa-btn-text-color-hover: var(--ooa-btn-text-color);
     --ooa-btn-text-color-active: var(--ooa-btn-text-color);
   }
-  :host([data-color="default"][variant="filled"]),
-  :host([data-color="default"][variant="text"]) {
+  :host([data-color="default"][data-variant="filled"]),
+  :host([data-color="default"][data-variant="text"]) {
     --ooa-btn-text-color-hover: var(--ooa-btn-text-color);
     --ooa-btn-text-color-active: var(--ooa-btn-text-color);
   }
-  :host([data-color="default"][variant="outlined"]),
-  :host([data-color="default"][variant="dashed"]) {
+  :host([data-color="default"][data-variant="outlined"]),
+  :host([data-color="default"][data-variant="dashed"]) {
     --ooa-btn-text-color: var(--ooa-color-text, rgba(0, 0, 0, 0.88));
     --ooa-btn-text-color-hover: var(--ooa-color-primary-hover, #4096ff);
     --ooa-btn-text-color-active: var(--ooa-color-primary-active, #0958d9);
@@ -210,14 +210,14 @@ export const buttonVariantStyles = css`
     --ooa-btn-bg-color-hover: var(--ooa-color-bg-container, #fff);
     --ooa-btn-bg-color-active: var(--ooa-color-bg-container, #fff);
   }
-  :host([data-color="default"][variant="text"]) {
+  :host([data-color="default"][data-variant="text"]) {
     --ooa-btn-text-color: var(--ooa-btn-text-text-color);
     --ooa-btn-text-color-hover: var(--ooa-btn-text-text-color-hover);
     --ooa-btn-text-color-active: var(--ooa-btn-text-text-color-active);
     --ooa-btn-bg-color-hover: var(--ooa-btn-text-hover-bg);
   }
-  :host([data-color="default"][ghost][variant="outlined"]),
-  :host([data-color="default"][ghost][variant="dashed"]) {
+  :host([data-color="default"][ghost][data-variant="outlined"]),
+  :host([data-color="default"][ghost][data-variant="dashed"]) {
     --ooa-btn-text-color: var(--ooa-btn-default-ghost-color);
     --ooa-btn-border-color: var(--ooa-btn-default-ghost-border-color);
   }
@@ -356,8 +356,8 @@ export const buttonVariantStyles = css`
     --ooa-btn-bg-color-active: var(--ooa-btn-ghost-bg, transparent);
     --ooa-btn-shadow: none;
   }
-  :host([ghost][variant="outlined"]),
-  :host([ghost][variant="dashed"]) {
+  :host([ghost][data-variant="outlined"]),
+  :host([ghost][data-variant="dashed"]) {
     --ooa-btn-bg-color-hover: var(--ooa-btn-ghost-bg, transparent);
     --ooa-btn-bg-color-active: var(--ooa-btn-ghost-bg, transparent);
   }
