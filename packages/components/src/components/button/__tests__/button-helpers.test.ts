@@ -5,7 +5,6 @@ import {
   isTwoCNChar,
   isUnBorderedVariant,
   resolveColorVariant,
-  type ButtonColor,
 } from '../button-helpers.js';
 
 describe('isTwoCNChar', () => {
@@ -63,7 +62,7 @@ describe('resolveColorVariant', () => {
     expect(resolveColorVariant({ type: 'text', ghost: true })).toEqual({ color: 'default', variant: 'text' });
   });
   it('preset color 直通', () => {
-    for (const c of PRESET_COLORS as readonly ButtonColor[]) {
+    for (const c of PRESET_COLORS) {
       expect(resolveColorVariant({ color: c, variant: 'outlined' }).color).toBe(c);
     }
   });
@@ -73,8 +72,8 @@ describe('getLoadingConfig', () => {
   it('delay<=0 时 loading 立即生效', () => {
     expect(getLoadingConfig(true, 0)).toEqual({ loading: true, delay: 0 });
   });
-  it('delay>0 时延迟生效，loading 暂为 false', () => {
-    expect(getLoadingConfig(false, 200)).toEqual({ loading: false, delay: 200 });
+  it('delay>0 时延迟生效，即使 loading=true 也暂为 false', () => {
+    expect(getLoadingConfig(true, 200)).toEqual({ loading: false, delay: 200 });
   });
   it('delay<=0 且 loading false', () => {
     expect(getLoadingConfig(false, 0)).toEqual({ loading: false, delay: 0 });

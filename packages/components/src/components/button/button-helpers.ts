@@ -1,13 +1,22 @@
-export type ButtonType = 'default' | 'primary' | 'dashed' | 'link' | 'text';
+// 类型从常量数组推导（对位 antd `_ButtonTypes` / `(typeof _ButtonTypes)[number]` 模式），
+// 避免 union 与数组双源漂移。
+const _ButtonTypes = ['default', 'primary', 'dashed', 'link', 'text'] as const;
+export type ButtonType = (typeof _ButtonTypes)[number];
+
 export type ButtonShape = 'default' | 'circle' | 'round' | 'square';
 export type ButtonHTMLType = 'submit' | 'button' | 'reset';
-export type ButtonVariant = 'outlined' | 'dashed' | 'solid' | 'filled' | 'text' | 'link';
-export type PresetColor = 'blue' | 'purple' | 'cyan' | 'green' | 'magenta' | 'pink' | 'red' | 'orange' | 'yellow' | 'volcano' | 'geekblue' | 'lime' | 'gold';
+
+const _ButtonVariants = ['outlined', 'dashed', 'solid', 'filled', 'text', 'link'] as const;
+export type ButtonVariant = (typeof _ButtonVariants)[number];
+
+const _PresetColors = ['blue', 'purple', 'cyan', 'green', 'magenta', 'pink', 'red', 'orange', 'yellow', 'volcano', 'geekblue', 'lime', 'gold'] as const;
+export type PresetColor = (typeof _PresetColors)[number];
+
 export type ButtonColor = 'default' | 'primary' | 'danger' | 'link' | PresetColor;
 
-export const BUTTON_TYPES: readonly ButtonType[] = ['default', 'primary', 'dashed', 'link', 'text'];
-export const BUTTON_VARIANTS: readonly ButtonVariant[] = ['outlined', 'dashed', 'solid', 'filled', 'text', 'link'];
-export const PRESET_COLORS: readonly PresetColor[] = ['blue', 'purple', 'cyan', 'green', 'magenta', 'pink', 'red', 'orange', 'yellow', 'volcano', 'geekblue', 'lime', 'gold'];
+export const BUTTON_TYPES: readonly ButtonType[] = _ButtonTypes;
+export const BUTTON_VARIANTS: readonly ButtonVariant[] = _ButtonVariants;
+export const PRESET_COLORS: readonly PresetColor[] = _PresetColors;
 
 const rxTwoCNChar = /^[一-龥]{2}$/;
 export const isTwoCNChar = (char: string): boolean => rxTwoCNChar.test(char);
