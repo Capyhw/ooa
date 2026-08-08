@@ -42,23 +42,25 @@ export const buttonVariantStyles = css`
     --ooa-btn-shadow: none;
   }
 
-  /* ===== 模板（应用到内部 button，对位 antd 模板段） ===== */
-  button {
+  /* ===== 模板（应用到内部 button/a，对位 antd 模板段）=====
+     .ooa-btn 标签无关：button 与 anchor 分支（a.ooa-btn）都命中。
+     anchor 无 :disabled 属性，disabled 用 .ooa-btn-disabled 类表达。 */
+  .ooa-btn {
     border: var(--ooa-btn-border-width) var(--ooa-btn-border-style) var(--ooa-btn-border-color);
     color: var(--ooa-btn-text-color);
     background-color: var(--ooa-btn-bg-color);
   }
-  button:hover:not(:disabled) {
+  .ooa-btn:hover:not(:disabled):not(.ooa-btn-disabled) {
     border-color: var(--ooa-btn-border-color-hover);
     color: var(--ooa-btn-text-color-hover);
     background-color: var(--ooa-btn-bg-color-hover);
   }
-  button:active:not(:disabled) {
+  .ooa-btn:active:not(:disabled):not(.ooa-btn-disabled) {
     border-color: var(--ooa-btn-border-color-active);
     color: var(--ooa-btn-text-color-active);
     background-color: var(--ooa-btn-bg-color-active);
   }
-  button:focus-visible {
+  .ooa-btn:focus-visible {
     /* 对位 antd genFocusOutline：lineWidthFocus（3px） */
     outline: var(--ooa-line-width-focus, 3px) solid var(--ooa-color-primary-border, #91caff);
     outline-offset: 1px;
@@ -78,7 +80,7 @@ export const buttonVariantStyles = css`
     --ooa-btn-bg-color-hover: var(--ooa-btn-solid-bg-color-hover);
     --ooa-btn-bg-color-active: var(--ooa-btn-solid-bg-color-active);
   }
-  :host([data-variant="solid"]) button {
+  :host([data-variant="solid"]) .ooa-btn {
     box-shadow: var(--ooa-btn-shadow);
   }
   /* >>>>> Outlined & Dashed */
@@ -92,8 +94,8 @@ export const buttonVariantStyles = css`
     --ooa-btn-text-color-hover: var(--ooa-btn-color-hover);
     --ooa-btn-text-color-active: var(--ooa-btn-color-active);
   }
-  :host([data-variant="outlined"]) button,
-  :host([data-variant="dashed"]) button {
+  :host([data-variant="outlined"]) .ooa-btn,
+  :host([data-variant="dashed"]) .ooa-btn {
     box-shadow: var(--ooa-btn-shadow);
   }
   /* >>>>> Dashed */
@@ -123,8 +125,10 @@ export const buttonVariantStyles = css`
     --ooa-btn-bg-color-hover: transparent;
     --ooa-btn-bg-color-active: transparent;
   }
-  :host([data-variant="text"]) button:disabled,
-  :host([data-variant="link"]) button:disabled {
+  :host([data-variant="text"]) .ooa-btn:disabled,
+  :host([data-variant="link"]) .ooa-btn:disabled,
+  :host([data-variant="text"]) .ooa-btn.ooa-btn-disabled,
+  :host([data-variant="link"]) .ooa-btn.ooa-btn-disabled {
     background: transparent;
     border-color: transparent;
   }
@@ -341,7 +345,8 @@ export const buttonVariantStyles = css`
   }
 
   /* ===== Disabled（对位 antd &*:disabled, &-disabled） ===== */
-  button:disabled {
+  .ooa-btn:disabled,
+  .ooa-btn.ooa-btn-disabled {
     cursor: not-allowed;
     border-color: var(--ooa-color-border-disabled, #d9d9d9);
     background: var(--ooa-btn-bg-color-disabled);

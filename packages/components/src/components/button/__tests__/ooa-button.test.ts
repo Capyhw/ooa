@@ -1,10 +1,18 @@
-import { expect } from 'vitest';
+import { html } from 'lit';
+import { expect, vi } from 'vitest';
+import { fixture } from '../../../testing/fixture.js';
 import '../ooa-button.js';
 
 function getButton(el: HTMLElement): HTMLButtonElement {
   const b = el.shadowRoot?.querySelector('button');
   if (!b) throw new Error('no <button> in shadow root');
   return b;
+}
+
+function getAnchor(el: HTMLElement): HTMLAnchorElement {
+  const a = el.shadowRoot?.querySelector('a');
+  if (!a) throw new Error('no <a> in shadow root');
+  return a;
 }
 
 /**
@@ -106,5 +114,95 @@ describe('disabled', () => {
     const btn = getButton(el);
     expect(btn.disabled).toBe(true);
     expect(getComputedStyle(btn).cursor).toBe('not-allowed');
+  });
+});
+
+describe('loading', () => {
+  it('loading 时 aria-busy + -loading 类 + 默认 loading 图标', async () => {
+    const el = await renderButton({ loading: true }, '');
+    const btn = getButton(el);
+    expect(btn.getAttribute('aria-busy')).toBe('true');
+    expect(btn.classList.contains('ooa-btn-loading')).toBe(true);
+    expect(el.shadowRoot?.querySelector('.ooa-btn-icon svg')).not.toBeNull();
+  });
+  it('loading-delay 延迟生效（假定时器）', async () => {
+    // 只 fake setTimeout/clearTimeout，避免卡住 renderButton 里的 rAF
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
+    try {
+      const el = await renderButton({ loading: true, 'loading-delay': '200' }, '');
+      expect(getButton(el).classList.contains('ooa-btn-loading')).toBe(false);
+      vi.advanceTimersByTime(200);
+      await (el as HTMLElement & { updateComplete?: Promise<unknown> }).updateComplete;
+      expect(getButton(el).classList.contains('ooa-btn-loading')).toBe(true);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+});
+
+describe('icon / icon-only / icon-placement', () => {
+  it('icon slot 存在且无默认内容 → icon-only 方钮', async () => {
+    const el = await fixture(html`<ooa-button><span slot="icon">★</span></ooa-button>`);
+    expect(getButton(el).classList.contains('ooa-btn-icon-only')).toBe(true);
+    expect(el.shadowRoot?.querySelector('.ooa-btn-icon')).not.toBeNull();
+  });
+  it('icon-placement=end → -icon-end 类', async () => {
+    const el = await renderButton({ 'icon-placement': 'end' }, '');
+    expect(getButton(el).classList.contains('ooa-btn-icon-end')).toBe(true);
+  });
+});
+
+describe('两汉字自动插空格', () => {
+  it('单汉字文本命中 -two-chinese-chars', async () => {
+    const el = await renderButton({}, '返回');
+    expect(getButton(el).classList.contains('ooa-btn-two-chinese-chars')).toBe(true);
+  });
+  it('auto-insert-space=false 关闭（property 设置，布尔属性无法表达 false）', async () => {
+    const el = await renderButton({}, '返回');
+    (el as unknown as { autoInsertSpace: boolean }).autoInsertSpace = false;
+    await (el as HTMLElement & { updateComplete?: Promise<unknown> }).updateComplete;
+    expect(getButton(el).classList.contains('ooa-btn-two-chinese-chars')).toBe(false);
+  });
+});
+
+describe('anchor 分支', () => {
+  it('href → <a>，带 href/target，按钮外观生效', async () => {
+    const el = await renderButton({ href: '/x', target: '_blank' }, 'Go');
+    const a = getAnchor(el);
+    expect(a.getAttribute('href')).toBe('/x');
+    expect(a.getAttribute('target')).toBe('_blank');
+    // anchor 复用按钮样式（.ooa-btn 标签无关选择器）
+    expect(parseFloat(getComputedStyle(a).height)).toBe(32); // controlHeight
+  });
+  it('disabled 移除 href + aria-disabled + tabindex + -disabled 类', async () => {
+    const el = await renderButton({ href: '/x', disabled: true }, 'Go');
+    const a = getAnchor(el);
+    expect(a.hasAttribute('href')).toBe(false);
+    expect(a.getAttribute('aria-disabled')).toBe('true');
+    expect(a.getAttribute('tabindex')).toBe('-1');
+    expect(a.classList.contains('ooa-btn-disabled')).toBe(true);
+  });
+});
+
+describe('点击阻断（对位 antd handleClick）', () => {
+  it('loading 时 preventDefault', async () => {
+    const el = await renderButton({ loading: true }, '');
+    const btn = getButton(el);
+    const e = new MouseEvent('click', { cancelable: true });
+    btn.dispatchEvent(e);
+    expect(e.defaultPrevented).toBe(true);
+  });
+  it('disabled 时 preventDefault', async () => {
+    const el = await renderButton({ disabled: true }, '');
+    const btn = getButton(el);
+    const e = new MouseEvent('click', { cancelable: true });
+    btn.dispatchEvent(e);
+    expect(e.defaultPrevented).toBe(true);
+  });
+  it('正常状态不阻断', async () => {
+    const el = await renderButton({}, '');
+    const e = new MouseEvent('click', { cancelable: true });
+    getButton(el).dispatchEvent(e);
+    expect(e.defaultPrevented).toBe(false);
   });
 });

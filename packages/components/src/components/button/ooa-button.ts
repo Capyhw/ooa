@@ -1,11 +1,15 @@
 import { consume } from '@lit/context';
-import { LitElement, html, nothing } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { LitElement, html, nothing, type PropertyValues } from 'lit';
+import { customElement, property, query, state } from 'lit/decorators.js';
 import { defaultOoaConfig, ooaConfigContext, type OoaConfig, type OoaSize } from '../../config/context.js';
 import { buttonStyles } from './style/index.js';
+import { iconWrapper } from './icon-wrapper.js';
+import { defaultLoadingIcon } from './default-loading-icon.js';
 import {
   resolveColorVariant,
   isUnBorderedVariant,
+  getLoadingConfig,
+  isTwoCNChar,
   type ButtonColor,
   type ButtonHTMLType,
   type ButtonShape,
@@ -70,6 +74,32 @@ export class OoaButton extends LitElement {
 
   static styles = buttonStyles;
 
+  // >>> 内部状态（对位 antd useState/useRef/useEffect）
+  /** 生效的 loading（loading-delay 延迟后置 true），对位 antd innerLoading。 */
+  @state() private innerLoading = false;
+  private _delayTimer: ReturnType<typeof setTimeout> | null = null;
+  /** 首帧挂载标记：首帧 loading 图标不带动画（对位 antd isMountRef）。 */
+  private _isMount = true;
+  /** icon slot 是否有内容（对位 antd `icon` prop 是否传入）。 */
+  private _hasIcon = false;
+  /** 默认内容 slot 是否有内容（对位 antd children 是否为空）。 */
+  private _hasDefaultContent = false;
+  private _hasTwoCNChar = false;
+
+  @query('slot[name="icon"]') private iconSlot?: HTMLSlotElement;
+  @query('slot:not([name])') private contentSlot?: HTMLSlotElement;
+
+  /** slot 内容变化时刷新 _hasIcon / _hasDefaultContent（对位 antd render 时感知 children/icon）。 */
+  private handleSlotChange = () => {
+    const hasIcon = (this.iconSlot?.assignedElements().length ?? 0) > 0;
+    const hasDefault = (this.contentSlot?.assignedNodes().length ?? 0) > 0;
+    if (hasIcon !== this._hasIcon || hasDefault !== this._hasDefaultContent) {
+      this._hasIcon = hasIcon;
+      this._hasDefaultContent = hasDefault;
+      this.requestUpdate();
+    }
+  };
+
   private get mergedShape(): ButtonShape { return this.shape ?? 'default'; }
   /** medium/middle 均视为 v6 medium（无类）；归一化避免类型发散。 */
   private get mergedSize(): OoaSize {
@@ -102,7 +132,7 @@ export class OoaButton extends LitElement {
    * 同时在首帧样式计算前就投影 solid 文字对比色：若在 updated() 里才设，会因
    * `transition: color` 出现 深→白 的过渡，getComputedStyle 读到过渡中间值。
    */
-  override willUpdate(): void {
+  override willUpdate(changed: PropertyValues<this>): void {
     const { color, variant } = this.colorVariant;
     if (this.dataset.color !== color) this.dataset.color = color;
     if (this.dataset.variant !== variant) this.dataset.variant = variant;
@@ -114,10 +144,46 @@ export class OoaButton extends LitElement {
         this.style.setProperty('--ooa-btn-solid-text-color', textColor);
       }
     }
+    // loading 定时器（对位 antd getLoadingConfig + useLayoutEffect 的 delay 分支）
+    if (changed.has('loading') || changed.has('loadingDelay')) {
+      const cfg = getLoadingConfig(this.loading, this.loadingDelay);
+      if (this._delayTimer) {
+        clearTimeout(this._delayTimer);
+        this._delayTimer = null;
+      }
+      if (cfg.delay > 0) {
+        this._delayTimer = setTimeout(() => {
+          this._delayTimer = null;
+          this.innerLoading = true;
+        }, cfg.delay);
+      } else {
+        this.innerLoading = cfg.loading;
+      }
+    }
+    // 两汉字检测（对位 antd useEffect 运行时读 button.textContent）。
+    // slot 不参与元素 textContent，故用宿主 this.textContent（= light DOM 文本）。
+    // 在 willUpdate 里算好，避免 updated() 里 requestUpdate 引发二次更新。
+    const text = this.textContent ?? '';
+    const needInserted = this.childNodes.length === 1 && !this._hasIcon && !isUnBorderedVariant(variant);
+    this._hasTwoCNChar = needInserted && (this.autoInsertSpace ?? true) && isTwoCNChar(text);
   }
 
-  // >>> 类名拼装（对位 antd classes；类加在内部 button 上）
-  private buildClasses(): string {
+  override firstUpdated(): void {
+    // 对位 antd isMountRef：首帧挂载后 loading 图标开始旋转
+    this._isMount = false;
+  }
+
+  override disconnectedCallback(): void {
+    super.disconnectedCallback();
+    if (this._delayTimer) {
+      clearTimeout(this._delayTimer);
+      this._delayTimer = null;
+    }
+  }
+
+  // >>> 类名拼装（对位 antd classes；类加在内部 button/a 上）
+  // anchorDisabled：anchor 分支 disabled 时加 -disabled 类（对位 antd `<a>` 分支）。
+  private buildClasses(anchorDisabled = false): string {
     const { color, variant } = this.colorVariant;
     const isDanger = color === 'danger';
     const mergedColorText = isDanger ? 'dangerous' : color;
@@ -132,41 +198,57 @@ export class OoaButton extends LitElement {
       size === 'small' ? 'ooa-btn-sm' : '',
       this.ghost && !unbordered ? 'ooa-btn-background-ghost' : '',
       this.danger ? 'ooa-btn-dangerous' : '',
-      // Task 5 追加：-loading / -icon-only / -two-chinese-chars / -icon-end
+      this.innerLoading ? 'ooa-btn-loading' : '',
+      this._hasTwoCNChar ? 'ooa-btn-two-chinese-chars' : '',
+      !this._hasDefaultContent && (this._hasIcon || this.innerLoading) ? 'ooa-btn-icon-only' : '',
+      this.iconPlacement === 'end' ? 'ooa-btn-icon-end' : '',
+      anchorDisabled ? 'ooa-btn-disabled' : '',
     ].filter(Boolean).join(' ');
   }
 
   override render() {
-    const classes = this.buildClasses();
-    const content = html`<span part="content"><slot></slot></span>`;
+    const disabled = this.disabled || this.config.disabled;
+    const classes = this.buildClasses(disabled && this.href !== undefined);
+
+    // icon 位（对位 antd iconNode）。两个 slot 常驻渲染以触发 slotchange 检测
+    // （若只在 _hasIcon 时渲染 icon slot 会自锁：slot 不存在 → 检测不到 icon）。
+    // 空且非 loading 时 wrapper 加隐藏类，避免空 span 的 gap 顶开文字。
+    const iconNode = iconWrapper(
+      html`
+        <slot name="icon" @slotchange=${this.handleSlotChange}></slot>
+        <slot name="loading-icon" @slotchange=${this.handleSlotChange}>${defaultLoadingIcon(this._isMount)}</slot>
+      `,
+      this._hasIcon || this.innerLoading ? '' : 'ooa-btn-icon-hidden',
+    );
+
+    const content = html`<span part="content"><slot @slotchange=${this.handleSlotChange}></slot></span>`;
 
     if (this.href !== undefined) {
-      const disabled = this.disabled || this.config.disabled;
       return html`
         <a
           class=${classes}
           href=${disabled ? nothing : this.href}
           target=${this.target ?? nothing}
-          ?aria-disabled=${disabled}
+          aria-disabled=${disabled ? 'true' : nothing}
           tabindex=${disabled ? -1 : 0}
           @click=${this.handleClick}
-        >${content}</a>`;
+        >${iconNode}${content}</a>`;
     }
 
-    const disabled = this.disabled || this.config.disabled;
     return html`
       <button
         type=${this.htmlType}
         class=${classes}
         ?disabled=${disabled}
+        aria-busy=${this.innerLoading ? 'true' : nothing}
         @click=${this.handleClick}
-      >${content}</button>`;
+      >${iconNode}${content}</button>`;
   }
 
   private handleClick(e: Event) {
-    // 对位 antd handleClick：loading || disabled → preventDefault
+    // 对位 antd handleClick：innerLoading || disabled → preventDefault
     const disabled = this.disabled || this.config.disabled;
-    if (this.loading || disabled) {
+    if (this.innerLoading || disabled) {
       e.preventDefault();
       return;
     }
