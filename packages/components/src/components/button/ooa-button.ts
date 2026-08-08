@@ -199,7 +199,7 @@ export class OoaButton extends LitElement {
       this.ghost && !unbordered ? 'ooa-btn-background-ghost' : '',
       this.danger ? 'ooa-btn-dangerous' : '',
       this.innerLoading ? 'ooa-btn-loading' : '',
-      this._hasTwoCNChar ? 'ooa-btn-two-chinese-chars' : '',
+      this._hasTwoCNChar && !this.innerLoading ? 'ooa-btn-two-chinese-chars' : '',
       !this._hasDefaultContent && (this._hasIcon || this.innerLoading) ? 'ooa-btn-icon-only' : '',
       this.iconPlacement === 'end' ? 'ooa-btn-icon-end' : '',
       anchorDisabled ? 'ooa-btn-disabled' : '',
