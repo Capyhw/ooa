@@ -30,17 +30,17 @@ function parseRgb(input: string): { r: number; g: number; b: number } | null {
 }
 
 /**
- * 对位 antd isBright：按相对亮度（近似 Rec.601 加权）判断 `colorBgSolid` 深浅，
- * 深底返回浅色文字（colorTextLightSolid），亮底返回深色文字（colorText）。
- * `color-contrast()` 在所有浏览器未实现（Chromium 151 亦不支持），故在 JS 侧计算。
+ * 对位 antd isBright 的不透明分支（color-picker/components/ColorPresets）：
+ * Rec.601 加权亮度 > 192 → 亮底黑字 `#000`，否则白字 `#fff`。
+ * 返回固定字面量、不随主题（antd solidTextColor 即固定字面量），避免 dark 模式浅底浅字。
+ * 注：antd 另有 a<=0.5 半透明分支走 HSV 合成，真实 colorBgSolid token 不会命中，故省略。
+ * `color-contrast()` 在所有浏览器未实现，故在 JS 侧计算。
  */
 function solidTextColor(bgColor: string): string {
   const rgb = parseRgb(bgColor);
-  if (!rgb) return 'var(--ooa-color-text-light-solid, #fff)';
-  const brightness = (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000;
-  return brightness >= 128
-    ? 'var(--ooa-color-text, rgba(0, 0, 0, 0.88))'
-    : 'var(--ooa-color-text-light-solid, #fff)';
+  if (!rgb) return '#fff';
+  const brightness = rgb.r * 0.299 + rgb.g * 0.587 + rgb.b * 0.114;
+  return brightness > 192 ? '#000' : '#fff';
 }
 
 @customElement('ooa-button')
@@ -106,12 +106,13 @@ export class OoaButton extends LitElement {
     const { color, variant } = this.colorVariant;
     if (this.dataset.color !== color) this.dataset.color = color;
     if (this.dataset.variant !== variant) this.dataset.variant = variant;
-    // 对位 antd isBright：`color-contrast()` 所有浏览器未实现，改在 JS 侧计算。
-    // 仅 `[data-color="default"][data-variant="solid"]` 消费该变量（inline 覆盖 token.ts 兜底）。
-    const bg = getComputedStyle(this).getPropertyValue('--ooa-color-bg-solid') || '#000';
-    const textColor = solidTextColor(bg);
-    if (this.style.getPropertyValue('--ooa-btn-solid-text-color') !== textColor) {
-      this.style.setProperty('--ooa-btn-solid-text-color', textColor);
+    // 仅 default/solid 消费 solid 文字对比色；其余组合跳过昂贵的 getComputedStyle。
+    if (color === 'default' && variant === 'solid') {
+      const bg = getComputedStyle(this).getPropertyValue('--ooa-color-bg-solid') || '#000';
+      const textColor = solidTextColor(bg);
+      if (this.style.getPropertyValue('--ooa-btn-solid-text-color') !== textColor) {
+        this.style.setProperty('--ooa-btn-solid-text-color', textColor);
+      }
     }
   }
 
