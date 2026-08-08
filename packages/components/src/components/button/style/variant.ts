@@ -3,7 +3,7 @@ import { css } from 'lit';
 /**
  * 对位 antd Button style/variant.js 的双轴（variant × color）CSS 变量系统。
  * antd 用 class 选择器（.ant-btn-variant-solid 等），这里用宿主属性选择器
- * :host([variant="..."]) / :host([color="..."]) / :host([danger]) / :host([ghost])，
+ * :host([data-variant="..."]) / :host([data-color="..."]) / :host([danger]) / :host([ghost])，
  * 结构逐段保持一致：变量声明 → 模板 → variant → color（link/primary/danger/default/预设色）→ disabled → ghost。
  * 所有颜色值一律 var(--ooa-*) + antd 兜底，不写死任何颜色。
  */
@@ -66,7 +66,7 @@ export const buttonVariantStyles = css`
 
   /* ===== Variants（只覆盖变量） ===== */
   /* >>>>> Solid */
-  :host([variant="solid"]) {
+  :host([data-variant="solid"]) {
     --ooa-btn-solid-bg-color: var(--ooa-btn-color-base);
     --ooa-btn-solid-bg-color-hover: var(--ooa-btn-color-hover);
     --ooa-btn-solid-bg-color-active: var(--ooa-btn-color-active);
@@ -78,12 +78,12 @@ export const buttonVariantStyles = css`
     --ooa-btn-bg-color-hover: var(--ooa-btn-solid-bg-color-hover);
     --ooa-btn-bg-color-active: var(--ooa-btn-solid-bg-color-active);
   }
-  :host([variant="solid"]) button {
+  :host([data-variant="solid"]) button {
     box-shadow: var(--ooa-btn-shadow);
   }
   /* >>>>> Outlined & Dashed */
-  :host([variant="outlined"]),
-  :host([variant="dashed"]) {
+  :host([data-variant="outlined"]),
+  :host([data-variant="dashed"]) {
     --ooa-btn-border-color: var(--ooa-btn-color-base);
     --ooa-btn-border-color-hover: var(--ooa-btn-color-hover);
     --ooa-btn-border-color-active: var(--ooa-btn-color-active);
@@ -92,17 +92,17 @@ export const buttonVariantStyles = css`
     --ooa-btn-text-color-hover: var(--ooa-btn-color-hover);
     --ooa-btn-text-color-active: var(--ooa-btn-color-active);
   }
-  :host([variant="outlined"]) button,
-  :host([variant="dashed"]) button {
+  :host([data-variant="outlined"]) button,
+  :host([data-variant="dashed"]) button {
     box-shadow: var(--ooa-btn-shadow);
   }
   /* >>>>> Dashed */
-  :host([variant="dashed"]) {
+  :host([data-variant="dashed"]) {
     --ooa-btn-border-style: dashed;
     --ooa-btn-bg-color-disabled: var(--ooa-color-bg-container-disabled, rgba(0, 0, 0, 0.04));
   }
   /* >>>>> Filled */
-  :host([variant="filled"]) {
+  :host([data-variant="filled"]) {
     --ooa-btn-border-color: transparent;
     --ooa-btn-text-color: var(--ooa-btn-color-base);
     --ooa-btn-bg-color: var(--ooa-btn-color-light);
@@ -110,8 +110,8 @@ export const buttonVariantStyles = css`
     --ooa-btn-bg-color-active: var(--ooa-btn-color-light-active);
   }
   /* >>>>> Text & Link */
-  :host([variant="text"]),
-  :host([variant="link"]) {
+  :host([data-variant="text"]),
+  :host([data-variant="link"]) {
     --ooa-btn-border-color: transparent;
     --ooa-btn-border-color-hover: transparent;
     --ooa-btn-border-color-active: transparent;
@@ -123,27 +123,27 @@ export const buttonVariantStyles = css`
     --ooa-btn-bg-color-hover: transparent;
     --ooa-btn-bg-color-active: transparent;
   }
-  :host([variant="text"]) button:disabled,
-  :host([variant="link"]) button:disabled {
+  :host([data-variant="text"]) button:disabled,
+  :host([data-variant="link"]) button:disabled {
     background: transparent;
     border-color: transparent;
   }
   /* >>>>> Text */
-  :host([variant="text"]) {
+  :host([data-variant="text"]) {
     --ooa-btn-bg-color-hover: var(--ooa-btn-color-light);
     --ooa-btn-bg-color-active: var(--ooa-btn-color-light-active);
   }
 
   /* ===== Colors（对位 antd 颜色段） ===== */
   /* >>>>> Link（variant link 的默认色） */
-  :host([variant="link"]) {
+  :host([data-variant="link"]) {
     --ooa-btn-color-base: var(--ooa-color-link, #1677ff);
     --ooa-btn-color-hover: var(--ooa-color-link-hover, #69b1ff);
     --ooa-btn-color-active: var(--ooa-color-link-active, #0958d9);
     --ooa-btn-bg-color-hover: var(--ooa-btn-link-hover-bg, transparent);
   }
   /* >>>>> Primary */
-  :host([color="primary"]) {
+  :host([data-color="primary"]) {
     --ooa-btn-color-base: var(--ooa-color-primary, #1677ff);
     --ooa-btn-color-hover: var(--ooa-color-primary-hover, #4096ff);
     --ooa-btn-color-active: var(--ooa-color-primary-active, #0958d9);
@@ -152,7 +152,7 @@ export const buttonVariantStyles = css`
     --ooa-btn-color-light-active: var(--ooa-color-primary-border, #91caff);
     --ooa-btn-shadow: var(--ooa-btn-primary-shadow);
   }
-  :host([color="primary"][variant="solid"]) {
+  :host([data-color="primary"][variant="solid"]) {
     --ooa-btn-text-color: var(--ooa-color-text-light-solid, #fff);
     --ooa-btn-text-color-hover: var(--ooa-btn-text-color);
     --ooa-btn-text-color-active: var(--ooa-btn-text-color);
@@ -173,7 +173,7 @@ export const buttonVariantStyles = css`
     --ooa-btn-text-color-active: var(--ooa-btn-text-color);
   }
   /* >>>>> Default */
-  :host([color="default"]) {
+  :host([data-color="default"]) {
     --ooa-btn-solid-bg-color: var(--ooa-color-bg-solid, #000);
     --ooa-btn-solid-bg-color-hover: var(--ooa-color-bg-solid-hover, rgba(0, 0, 0, 0.75));
     --ooa-btn-solid-bg-color-active: var(--ooa-color-bg-solid-active, rgba(0, 0, 0, 0.95));
@@ -188,21 +188,21 @@ export const buttonVariantStyles = css`
     --ooa-btn-text-color-active: var(--ooa-color-primary-active, #0958d9);
     --ooa-btn-shadow: var(--ooa-btn-default-shadow);
   }
-  :host([color="default"][variant="outlined"]) {
+  :host([data-color="default"][variant="outlined"]) {
     --ooa-btn-bg-color-disabled: var(--ooa-color-bg-container-disabled, rgba(0, 0, 0, 0.04));
   }
-  :host([color="default"][variant="solid"]) {
+  :host([data-color="default"][variant="solid"]) {
     --ooa-btn-text-color: var(--ooa-btn-solid-text-color);
     --ooa-btn-text-color-hover: var(--ooa-btn-text-color);
     --ooa-btn-text-color-active: var(--ooa-btn-text-color);
   }
-  :host([color="default"][variant="filled"]),
-  :host([color="default"][variant="text"]) {
+  :host([data-color="default"][variant="filled"]),
+  :host([data-color="default"][variant="text"]) {
     --ooa-btn-text-color-hover: var(--ooa-btn-text-color);
     --ooa-btn-text-color-active: var(--ooa-btn-text-color);
   }
-  :host([color="default"][variant="outlined"]),
-  :host([color="default"][variant="dashed"]) {
+  :host([data-color="default"][variant="outlined"]),
+  :host([data-color="default"][variant="dashed"]) {
     --ooa-btn-text-color: var(--ooa-color-text, rgba(0, 0, 0, 0.88));
     --ooa-btn-text-color-hover: var(--ooa-color-primary-hover, #4096ff);
     --ooa-btn-text-color-active: var(--ooa-color-primary-active, #0958d9);
@@ -210,19 +210,19 @@ export const buttonVariantStyles = css`
     --ooa-btn-bg-color-hover: var(--ooa-color-bg-container, #fff);
     --ooa-btn-bg-color-active: var(--ooa-color-bg-container, #fff);
   }
-  :host([color="default"][variant="text"]) {
+  :host([data-color="default"][variant="text"]) {
     --ooa-btn-text-color: var(--ooa-btn-text-text-color);
     --ooa-btn-text-color-hover: var(--ooa-btn-text-text-color-hover);
     --ooa-btn-text-color-active: var(--ooa-btn-text-text-color-active);
     --ooa-btn-bg-color-hover: var(--ooa-btn-text-hover-bg);
   }
-  :host([color="default"][ghost][variant="outlined"]),
-  :host([color="default"][ghost][variant="dashed"]) {
+  :host([data-color="default"][ghost][variant="outlined"]),
+  :host([data-color="default"][ghost][variant="dashed"]) {
     --ooa-btn-text-color: var(--ooa-btn-default-ghost-color);
     --ooa-btn-border-color: var(--ooa-btn-default-ghost-border-color);
   }
   /* >>>>> 13 预设色（对位 antd PresetColors.map） */
-  :host([color="blue"]) {
+  :host([data-color="blue"]) {
     --ooa-btn-color-base: var(--ooa-blue, #1677ff);
     --ooa-btn-color-hover: var(--ooa-blue-hover, #4096ff);
     --ooa-btn-color-active: var(--ooa-blue-active, #0958d9);
@@ -231,7 +231,7 @@ export const buttonVariantStyles = css`
     --ooa-btn-color-light-active: var(--ooa-blue-3, #91caff);
     --ooa-btn-shadow: var(--ooa-btn-blue-shadow);
   }
-  :host([color="purple"]) {
+  :host([data-color="purple"]) {
     --ooa-btn-color-base: var(--ooa-purple, #722ed1);
     --ooa-btn-color-hover: var(--ooa-purple-hover, #9254de);
     --ooa-btn-color-active: var(--ooa-purple-active, #531dab);
@@ -240,7 +240,7 @@ export const buttonVariantStyles = css`
     --ooa-btn-color-light-active: var(--ooa-purple-3, #d3adf7);
     --ooa-btn-shadow: var(--ooa-btn-purple-shadow);
   }
-  :host([color="cyan"]) {
+  :host([data-color="cyan"]) {
     --ooa-btn-color-base: var(--ooa-cyan, #13c2c2);
     --ooa-btn-color-hover: var(--ooa-cyan-hover, #36cfc9);
     --ooa-btn-color-active: var(--ooa-cyan-active, #08979c);
@@ -249,7 +249,7 @@ export const buttonVariantStyles = css`
     --ooa-btn-color-light-active: var(--ooa-cyan-3, #87e8de);
     --ooa-btn-shadow: var(--ooa-btn-cyan-shadow);
   }
-  :host([color="green"]) {
+  :host([data-color="green"]) {
     --ooa-btn-color-base: var(--ooa-green, #52c41a);
     --ooa-btn-color-hover: var(--ooa-green-hover, #73d13d);
     --ooa-btn-color-active: var(--ooa-green-active, #389e0d);
@@ -258,7 +258,7 @@ export const buttonVariantStyles = css`
     --ooa-btn-color-light-active: var(--ooa-green-3, #b7eb8f);
     --ooa-btn-shadow: var(--ooa-btn-green-shadow);
   }
-  :host([color="magenta"]) {
+  :host([data-color="magenta"]) {
     --ooa-btn-color-base: var(--ooa-magenta, #eb2f96);
     --ooa-btn-color-hover: var(--ooa-magenta-hover, #f759ab);
     --ooa-btn-color-active: var(--ooa-magenta-active, #c41d7f);
@@ -267,7 +267,7 @@ export const buttonVariantStyles = css`
     --ooa-btn-color-light-active: var(--ooa-magenta-3, #ffadd2);
     --ooa-btn-shadow: var(--ooa-btn-magenta-shadow);
   }
-  :host([color="pink"]) {
+  :host([data-color="pink"]) {
     --ooa-btn-color-base: var(--ooa-pink, #eb2f96);
     --ooa-btn-color-hover: var(--ooa-pink-hover, #f759ab);
     --ooa-btn-color-active: var(--ooa-pink-active, #c41d7f);
@@ -276,7 +276,7 @@ export const buttonVariantStyles = css`
     --ooa-btn-color-light-active: var(--ooa-pink-3, #ffadd2);
     --ooa-btn-shadow: var(--ooa-btn-pink-shadow);
   }
-  :host([color="red"]) {
+  :host([data-color="red"]) {
     --ooa-btn-color-base: var(--ooa-red, #f5222d);
     --ooa-btn-color-hover: var(--ooa-red-hover, #ff4d4f);
     --ooa-btn-color-active: var(--ooa-red-active, #cf1322);
@@ -285,7 +285,7 @@ export const buttonVariantStyles = css`
     --ooa-btn-color-light-active: var(--ooa-red-3, #ffa39e);
     --ooa-btn-shadow: var(--ooa-btn-red-shadow);
   }
-  :host([color="orange"]) {
+  :host([data-color="orange"]) {
     --ooa-btn-color-base: var(--ooa-orange, #fa8c16);
     --ooa-btn-color-hover: var(--ooa-orange-hover, #ffa940);
     --ooa-btn-color-active: var(--ooa-orange-active, #d46b08);
@@ -294,7 +294,7 @@ export const buttonVariantStyles = css`
     --ooa-btn-color-light-active: var(--ooa-orange-3, #ffd591);
     --ooa-btn-shadow: var(--ooa-btn-orange-shadow);
   }
-  :host([color="yellow"]) {
+  :host([data-color="yellow"]) {
     --ooa-btn-color-base: var(--ooa-yellow, #fadb14);
     --ooa-btn-color-hover: var(--ooa-yellow-hover, #ffec3d);
     --ooa-btn-color-active: var(--ooa-yellow-active, #d4b106);
@@ -303,7 +303,7 @@ export const buttonVariantStyles = css`
     --ooa-btn-color-light-active: var(--ooa-yellow-3, #fffb8f);
     --ooa-btn-shadow: var(--ooa-btn-yellow-shadow);
   }
-  :host([color="volcano"]) {
+  :host([data-color="volcano"]) {
     --ooa-btn-color-base: var(--ooa-volcano, #fa541c);
     --ooa-btn-color-hover: var(--ooa-volcano-hover, #ff7a45);
     --ooa-btn-color-active: var(--ooa-volcano-active, #d4380d);
@@ -312,7 +312,7 @@ export const buttonVariantStyles = css`
     --ooa-btn-color-light-active: var(--ooa-volcano-3, #ffbb96);
     --ooa-btn-shadow: var(--ooa-btn-volcano-shadow);
   }
-  :host([color="geekblue"]) {
+  :host([data-color="geekblue"]) {
     --ooa-btn-color-base: var(--ooa-geekblue, #2f54eb);
     --ooa-btn-color-hover: var(--ooa-geekblue-hover, #597ef7);
     --ooa-btn-color-active: var(--ooa-geekblue-active, #1d39c4);
@@ -321,7 +321,7 @@ export const buttonVariantStyles = css`
     --ooa-btn-color-light-active: var(--ooa-geekblue-3, #adc6ff);
     --ooa-btn-shadow: var(--ooa-btn-geekblue-shadow);
   }
-  :host([color="lime"]) {
+  :host([data-color="lime"]) {
     --ooa-btn-color-base: var(--ooa-lime, #a0d911);
     --ooa-btn-color-hover: var(--ooa-lime-hover, #bae637);
     --ooa-btn-color-active: var(--ooa-lime-active, #7cb305);
@@ -330,7 +330,7 @@ export const buttonVariantStyles = css`
     --ooa-btn-color-light-active: var(--ooa-lime-3, #eaff8f);
     --ooa-btn-shadow: var(--ooa-btn-lime-shadow);
   }
-  :host([color="gold"]) {
+  :host([data-color="gold"]) {
     --ooa-btn-color-base: var(--ooa-gold, #faad14);
     --ooa-btn-color-hover: var(--ooa-gold-hover, #ffc53d);
     --ooa-btn-color-active: var(--ooa-gold-active, #d48806);

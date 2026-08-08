@@ -34,9 +34,10 @@ export const buttonTokens = css`
     --ooa-btn-lime-shadow: 0 var(--ooa-control-outline-width, 2px) 0 var(--ooa-lime-1, #fcffe6);
     --ooa-btn-gold-shadow: 0 var(--ooa-control-outline-width, 2px) 0 var(--ooa-gold-1, #fffbe6);
 
-    /* solid 文字色：color-contrast 近似 antd isBright（默认 token 值下结果一致；
-       自定义中间调 --ooa-color-bg-solid 时可能略有差异，需 Chrome 111+/Safari 17.4+/FF 121+） */
-    --ooa-btn-solid-text-color: color-contrast(var(--ooa-color-bg-solid, #000) vs #000, #fff);
+    /* solid 文字色：color-contrast() 在所有浏览器未实现，改为由 ooa-button 在 JS 侧按
+       isBright 计算后内联到宿主 --ooa-btn-solid-text-color（对位 antd solidTextColor）。
+       此处仅声明默认值供 JS 未接管时兜底。 */
+    --ooa-btn-solid-text-color: var(--ooa-color-text-light-solid, #fff);
 
     /* text / link 相关 */
     --ooa-btn-text-text-color: var(--ooa-color-text, rgba(0, 0, 0, 0.88));

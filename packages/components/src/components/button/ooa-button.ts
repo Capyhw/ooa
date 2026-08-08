@@ -91,20 +91,23 @@ export class OoaButton extends LitElement {
   }
 
   /**
-   * 把推导出的有效 color/variant 投影回宿主反射属性（对位 antd 在 button 元素上加
-   * `-color-*` / `-variant-*` 类）。style/variant.ts 用 `:host([color="..."])` /
-   * `:host([variant="..."])` 选择器声明双轴变量，type 语法糖/ghost 降级只存在于
-   * 推导结果里，必须落到宿主属性上选择器才命中。值相等时不再触发重渲染（幂等）。
+   * 把推导出的有效 color/variant 投影到宿主 `data-color`/`data-variant`（style/variant.ts
+   * 用 :host([data-color=...]) 选择器声明双轴变量）。type 糖/ghost 降级只存在于推导结果里，
+   * 必须落到宿主属性上选择器才命中。
+   *
+   * 注意：不能写回 `this.color`/`this.variant`（用户 props）——否则 `<ooa-button type="primary">`
+   * 渲染后残留的 color+variant 会让后续 `setAttribute('type','text')` 因 `color && variant`
+   * 优先分支而失效。dataset 只做 CSS 匹配，不参与 resolveColorVariant 输入。
    *
    * 同时在首帧样式计算前就投影 solid 文字对比色：若在 updated() 里才设，会因
    * `transition: color` 出现 深→白 的过渡，getComputedStyle 读到过渡中间值。
    */
   override willUpdate(): void {
     const { color, variant } = this.colorVariant;
-    if (this.color !== color) this.color = color;
-    if (this.variant !== variant) this.variant = variant;
+    if (this.dataset.color !== color) this.dataset.color = color;
+    if (this.dataset.variant !== variant) this.dataset.variant = variant;
     // 对位 antd isBright：`color-contrast()` 所有浏览器未实现，改在 JS 侧计算。
-    // 仅 `[color="default"][variant="solid"]` 消费该变量（inline 覆盖 token.ts 兜底）。
+    // 仅 `[data-color="default"][data-variant="solid"]` 消费该变量（inline 覆盖 token.ts 兜底）。
     const bg = getComputedStyle(this).getPropertyValue('--ooa-color-bg-solid') || '#000';
     const textColor = solidTextColor(bg);
     if (this.style.getPropertyValue('--ooa-btn-solid-text-color') !== textColor) {
