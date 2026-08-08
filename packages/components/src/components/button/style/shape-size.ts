@@ -23,7 +23,12 @@ export const buttonShapeSizeStyles = css`
     white-space: nowrap;
     text-align: center;
     cursor: pointer;
-    border-radius: var(--ooa-border-radius, 6px);
+    /* 圆角分边声明，供按钮组（style/group.ts）经 --ooa-btn-group-start/end-radius
+       CSS 变量桥接清零（::slotted() 无法 ::part() 深入 shadow） */
+    border-start-start-radius: var(--ooa-btn-group-start-radius, var(--ooa-border-radius, 6px));
+    border-start-end-radius: var(--ooa-btn-group-end-radius, var(--ooa-border-radius, 6px));
+    border-end-start-radius: var(--ooa-btn-group-start-radius, var(--ooa-border-radius, 6px));
+    border-end-end-radius: var(--ooa-btn-group-end-radius, var(--ooa-border-radius, 6px));
     outline: none;
     user-select: none;
     touch-action: manipulation;

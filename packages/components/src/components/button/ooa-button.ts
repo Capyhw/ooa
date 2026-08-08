@@ -3,6 +3,7 @@ import { LitElement, html, nothing, type PropertyValues } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
 import { defaultOoaConfig, ooaConfigContext, type OoaConfig, type OoaSize } from '../../config/context.js';
 import { buttonStyles } from './style/index.js';
+import { groupSizeContext } from './button-group.js';
 import { iconWrapper } from './icon-wrapper.js';
 import { defaultLoadingIcon } from './default-loading-icon.js';
 import {
@@ -108,7 +109,9 @@ export class OoaButton extends LitElement {
     return s === 'medium' ? 'middle' : s;
   }
 
-  /** Task 6 由 button-group 提供；本任务先置 undefined。 */
+  /** 组大小（对位 antd GroupSizeContext）：size 解析链 props → group → config。 */
+  @consume({ context: groupSizeContext, subscribe: true })
+  @property({ attribute: false })
   protected groupSize: OoaSize | undefined = undefined;
 
   private get colorVariant() {
@@ -228,6 +231,7 @@ export class OoaButton extends LitElement {
     if (this.href !== undefined) {
       return html`
         <a
+          part="root"
           class=${classes}
           href=${disabled ? nothing : this.href}
           target=${this.target ?? nothing}
@@ -239,6 +243,7 @@ export class OoaButton extends LitElement {
 
     return html`
       <button
+        part="root"
         type=${this.htmlType}
         class=${classes}
         ?disabled=${disabled}
