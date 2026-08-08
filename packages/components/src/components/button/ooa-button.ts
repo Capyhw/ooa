@@ -78,8 +78,9 @@ export class OoaButton extends LitElement {
   /** 生效的 loading（loading-delay 延迟后置 true），对位 antd innerLoading。 */
   @state() private innerLoading = false;
   private _delayTimer: ReturnType<typeof setTimeout> | null = null;
-  /** 首帧挂载标记：首帧 loading 图标不带动画（对位 antd isMountRef）。 */
-  private _isMount = true;
+  /** 首帧挂载标记：首帧 loading 图标不带动画（对位 antd isMountRef）。
+   *  用 @state 使 firstUpdated 置 false 时触发二次渲染 → 直接 loading 的 spinner 开始转。 */
+  @state() private _isMount = true;
   /** icon slot 是否有内容（对位 antd `icon` prop 是否传入）。 */
   private _hasIcon = false;
   /** 默认内容 slot 是否有内容（对位 antd children 是否为空）。 */
@@ -175,6 +176,7 @@ export class OoaButton extends LitElement {
 
   override disconnectedCallback(): void {
     super.disconnectedCallback();
+    // 断开即取消 pending delay；重连后用户重触发 loading 即重新调度
     if (this._delayTimer) {
       clearTimeout(this._delayTimer);
       this._delayTimer = null;
@@ -229,7 +231,7 @@ export class OoaButton extends LitElement {
           class=${classes}
           href=${disabled ? nothing : this.href}
           target=${this.target ?? nothing}
-          aria-disabled=${disabled ? 'true' : nothing}
+          aria-disabled=${disabled}
           tabindex=${disabled ? -1 : 0}
           @click=${this.handleClick}
         >${iconNode}${content}</a>`;

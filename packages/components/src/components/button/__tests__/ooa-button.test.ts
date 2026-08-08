@@ -125,6 +125,11 @@ describe('loading', () => {
     expect(btn.classList.contains('ooa-btn-loading')).toBe(true);
     expect(el.shadowRoot?.querySelector('.ooa-btn-icon svg')).not.toBeNull();
   });
+  it('首帧挂载后 loading 图标带旋转类（_isMount 触发二次渲染）', async () => {
+    const el = await renderButton({ loading: true }, '');
+    const svg = el.shadowRoot?.querySelector('.ooa-btn-icon svg');
+    expect(svg?.classList.contains('ooa-btn-spin')).toBe(true);
+  });
   it('loading-delay 延迟生效（假定时器）', async () => {
     // 只 fake setTimeout/clearTimeout，避免卡住 renderButton 里的 rAF
     vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
