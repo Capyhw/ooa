@@ -59,7 +59,8 @@ export const buttonVariantStyles = css`
     background-color: var(--ooa-btn-bg-color-active);
   }
   button:focus-visible {
-    outline: var(--ooa-control-outline-width, 2px) solid var(--ooa-color-primary-border, #91caff);
+    /* 对位 antd genFocusOutline：lineWidthFocus（3px） */
+    outline: var(--ooa-line-width-focus, 3px) solid var(--ooa-color-primary-border, #91caff);
     outline-offset: 1px;
   }
 
@@ -70,7 +71,9 @@ export const buttonVariantStyles = css`
     --ooa-btn-solid-bg-color-hover: var(--ooa-btn-color-hover);
     --ooa-btn-solid-bg-color-active: var(--ooa-btn-color-active);
     --ooa-btn-border-color: transparent;
-    --ooa-btn-text-color: var(--ooa-btn-solid-text-color);
+    /* 基础 solid 文字用 text-light-solid（恒白/黑，对齐 antd colorTextLightSolid）；
+       default 色的 solid 在颜色段覆盖为对比度计算的 solid-text-color */
+    --ooa-btn-text-color: var(--ooa-color-text-light-solid, #fff);
     --ooa-btn-bg-color: var(--ooa-btn-solid-bg-color);
     --ooa-btn-bg-color-hover: var(--ooa-btn-solid-bg-color-hover);
     --ooa-btn-bg-color-active: var(--ooa-btn-solid-bg-color-active);
