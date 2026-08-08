@@ -261,3 +261,7 @@ export class OoaButton extends LitElement {
     }
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap { 'ooa-button': OoaButton; }
+}
