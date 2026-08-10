@@ -1,0 +1,25 @@
+{
+  "name": "@ooa/parity",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Visual parity workbench for OOA components and Ant Design.",
+  "scripts": {
+    "dev": "vite --port 7857",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --port 7857"
+  },
+  "dependencies": {
+    "@ooa/components": "workspace:*",
+    "@ooa/tokens": "workspace:*",
+    "antd": "6.5.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "typescript": "~6.0.2",
+    "vite": "^8.2.0"
+  }
+}

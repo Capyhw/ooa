@@ -15,10 +15,3 @@ The public runtime API is native DOM. Components emit composed, bubbling
 `ooa-change` events. Theme variables are inherited through Shadow DOM, while
 locale, direction, size, and disabled state are supplied by
 `<ooa-config-provider>` through `@lit/context`.
-
-## Test Strategy
-
-- Pure token algorithms run in Vitest's Node environment.
-- Components run in Vitest Browser Mode with the Playwright provider.
-- Visual regression is a required CI stage and compares pinned Chromium
-  screenshots against fixed `ant-design@6.5.3` reference fixtures.

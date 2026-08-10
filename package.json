@@ -6,11 +6,11 @@
   "packageManager": "pnpm@9.15.9",
   "scripts": {
     "build": "turbo run build",
-    "test": "turbo run test",
-    "test:browser": "turbo run test:browser",
     "dev": "pnpm --filter @ooa/components dev",
     "docs": "pnpm --filter docs dev",
-    "storybook": "pnpm --filter @ooa/storybook dev"
+    "storybook": "pnpm --filter @ooa/storybook dev",
+    "parity": "pnpm --filter @ooa/parity dev",
+    "test": "turbo run test"
   },
   "devDependencies": {
     "turbo": "^2.5.0",

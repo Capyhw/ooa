@@ -6,12 +6,7 @@
       "outputs": ["dist/**", ".next/**", "storybook-static/**"]
     },
     "test": {
-      "dependsOn": ["^build"],
-      "outputs": ["coverage/**"]
-    },
-    "test:browser": {
-      "dependsOn": ["^build"],
-      "outputs": ["coverage/**", "test-results/**"]
+      "outputs": []
     }
   }
 }
