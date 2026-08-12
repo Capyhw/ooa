@@ -226,7 +226,7 @@ export class OoaButton extends LitElement {
       this._hasIcon || this.innerLoading ? '' : 'ooa-btn-icon-hidden',
     );
 
-    const content = html`<span part="content"><slot @slotchange=${this.handleSlotChange}></slot></span>`;
+    const content = html`<span part="content" class="ooa-btn-content"><slot @slotchange=${this.handleSlotChange}></slot></span>`;
 
     if (this.href !== undefined) {
       return html`

@@ -40,15 +40,19 @@ export const buttonShapeSizeStyles = css`
 
   /* 形状（shape 是宿主属性） */
   :host([shape="round"]) .ooa-btn { border-radius: 999px; }
-  :host([shape="circle"]) .ooa-btn { min-width: var(--ooa-control-height, 32px); padding-inline: 0; border-radius: 50%; }
-  :host([shape="square"]) .ooa-btn { min-width: var(--ooa-control-height, 32px); padding-inline: 0; }
+  :host([shape="circle"]) .ooa-btn { min-width: var(--ooa-btn-min-width, var(--ooa-control-height, 32px)); padding-inline: 0; border-radius: 50%; }
+  :host([shape="square"]) .ooa-btn { min-width: var(--ooa-btn-min-width, var(--ooa-control-height, 32px)); padding-inline: 0; }
 
-  /* 尺寸：类加在内部 button/a 上（对齐 antd DOM） */
-  .ooa-btn.ooa-btn-sm { height: var(--ooa-control-height-sm, 24px); padding-inline: var(--ooa-btn-padding-inline-sm, 7px); font-size: var(--ooa-btn-content-font-size-sm, 14px); }
-  .ooa-btn.ooa-btn-lg { height: var(--ooa-control-height-lg, 40px); padding-inline: var(--ooa-btn-padding-inline-lg, 15px); font-size: var(--ooa-btn-content-font-size-lg, 16px); }
+  /* 尺寸：类加在内部 button/a 上（对齐 antd DOM）。--ooa-btn-min-width 供
+     circle/square/icon-only 消费、跟随 size（对位 antd .ant-btn-sm/lg 的 min-inline-size） */
+  .ooa-btn.ooa-btn-sm { height: var(--ooa-control-height-sm, 24px); --ooa-btn-min-width: var(--ooa-control-height-sm, 24px); padding-inline: var(--ooa-btn-padding-inline-sm, 7px); font-size: var(--ooa-btn-content-font-size-sm, 14px); }
+  .ooa-btn.ooa-btn-lg { height: var(--ooa-control-height-lg, 40px); --ooa-btn-min-width: var(--ooa-control-height-lg, 40px); padding-inline: var(--ooa-btn-padding-inline-lg, 15px); font-size: var(--ooa-btn-content-font-size-lg, 16px); }
 
   /* icon-only 方钮 */
-  .ooa-btn.ooa-btn-icon-only { min-width: var(--ooa-control-height, 32px); padding-inline: 0; }
+  .ooa-btn.ooa-btn-icon-only { min-width: var(--ooa-btn-min-width, var(--ooa-control-height, 32px)); padding-inline: 0; }
+  /* icon-only 时隐藏空的内容 span：antd 不渲染空 children，空 span 会因 flex gap
+     把 icon 从 justify-content: center 的居中位置挤偏 */
+  .ooa-btn.ooa-btn-icon-only .ooa-btn-content { display: none; }
 
   /* block */
   :host([block]) .ooa-btn { width: 100%; }
