@@ -386,6 +386,7 @@ button {
   display: flex;
   flex-direction: column;
   gap: 25px;
+  align-items: flex-start;
 }
 
 .demo-block {
@@ -405,27 +406,46 @@ button {
 .demo-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px 10px;
   align-items: center;
 }
 
 .demo-row-label {
-  min-width: 130px;
+  flex-basis: 100%;
   color: var(--surface-muted);
   font-size: 12px;
   font-family: var(--surface-mono, ui-monospace, monospace);
 }
 
-.variant-row {
+/* 幽灵按钮的深色衬底（对位官网 site-button-ghost-wrapper） */
+.demo-ghost-bg {
   display: flex;
-  flex-wrap: nowrap;
-  gap: 4px;
-  overflow: visible;
-  padding-bottom: 2px;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #26292b, #17191b);
+  border-radius: 2px;
 }
 
-.demo-row ooa-button[block] {
-  flex-basis: 100%;
+/* block 按钮纵向栈（对位官网 width: 100% 的 vertical Flex） */
+.demo-block-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+/* 自定义 loading 图标旋转（对位官网 <SyncOutlined spin />） */
+.demo-spin {
+  display: inline-block;
+  animation: demo-spin 1s linear infinite;
+}
+
+@keyframes demo-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .input-stack {
@@ -493,10 +513,6 @@ button {
   .surface-version {
     max-width: 90px;
     white-space: normal;
-  }
-
-  .variant-row {
-    overflow-x: auto;
   }
 }
 
